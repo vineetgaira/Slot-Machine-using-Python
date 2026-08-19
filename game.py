@@ -1,4 +1,7 @@
 import random
+import colorama 
+from colorama import Fore, Style
+colorama.init(autoreset=True)
 from constant import MAX_LINES, MAX_BET, MIN_BET, ROWS, COLS, symbols_count, symbols_value
 
 def check_winnings(columns, lines, bet, values):
@@ -44,8 +47,6 @@ def print_slot_machine(columns):
                 print(column[row],end="")
             
         print()
-
-
 
 def deposit():
     while True:
