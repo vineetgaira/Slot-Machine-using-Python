@@ -3,6 +3,7 @@ import colorama
 from colorama import Fore, Style
 colorama.init(autoreset=True)
 from constant import MAX_LINES, MAX_BET, MIN_BET, ROWS, COLS, symbols_count, symbols_value
+from utils import clear_screen
 
 def check_winnings(columns, lines, bet, values):
     winnings = 0
@@ -42,50 +43,50 @@ def print_slot_machine(columns):
     for row in range(len(columns[0])):
         for i, column in enumerate(columns):
             if i != len(columns) -1 :
-                print(column[row], end=" | ")
+                print(Fore.LIGHTBLUE_EX + column[row], end=" | ")
             else:
-                print(column[row],end="")
+                print(Fore.LIGHTBLUE_EX + column[row],end="")
             
         print()
 
 def deposit():
     while True:
-        amount=input("What would you like to deposit? ₹")
+        amount=input(Fore.LIGHTCYAN_EX + "What would you like to deposit? ₹")
         if amount.isdigit():
             amount = int(amount)
             if amount > 0:
                 break
             else:
-                print("Amount must be greater than 0.")
+                print(Fore.RED + "Amount must be greater than 0.")
         else:
-            print("Please enter a number.")
+            print(Fore.RED + "Please enter a number.")
     return amount
 
 def get_num_lines():
     while True:
-        lines=input("Enter the number of lines to bet on (1-"+ str(MAX_LINES) + ")? ")
+        lines=input(Fore.LIGHTCYAN_EX + "Enter the number of lines to bet on (1-"+ str(MAX_LINES) + ")? ")
         if lines.isdigit():
             lines = int(lines)
             if 1 <= lines <= MAX_LINES :
                 break
             else:
-                print(f"Enter a valid number of lines between 1-{MAX_LINES}.")
+                print(Fore.RED + f"Enter a valid number of lines between 1-{MAX_LINES}.")
         else:
-            print("Please enter a number.")
+            print(Fore.RED + "Please enter a number.")
     return lines
 
 def get_bet():
 
     while True:
-        bet_amount=input("What would you like to bet on each line? ₹")
+        bet_amount=input(Fore.LIGHTCYAN_EX + "What would you like to bet on each line? ₹")
         if bet_amount.isdigit():
             bet_amount = int(bet_amount)
             if MIN_BET <= bet_amount <= MAX_BET:
                 break
             else:
-                print(f"Amount must be between ₹{MIN_BET} - ₹{MAX_BET}")
+                print(Fore.RED + f"Amount must be between ₹{MIN_BET} - ₹{MAX_BET}")
         else:
-            print("Please enter a valid amount.")
+            print(Fore.RED + "Please enter a valid amount.")
     return bet_amount
 
 def spin(balance):
@@ -95,29 +96,30 @@ def spin(balance):
         total_bet=lines*bet
 
         if total_bet > balance:
-            print(f"You do not have enough balance to bet that amount, Your current balance is ₹{balance}.")
+            print(Fore.RED + f"You do not have enough balance to bet that amount, Your current balance is ₹{balance}.")
         else:
             break
-    print(f"Balance : ₹{balance}\tLines : {lines} lines.\nTotal bet is : ₹{total_bet}." )
+    print(Fore.YELLOW + f"Balance : ₹{balance}\tLines : {lines} lines.\nTotal bet is : ₹{total_bet}." )
 
     slots = get_slot_machine_spin(ROWS, COLS, symbols_count)
     print_slot_machine(slots)
 
     winnings, winning_lines = check_winnings(slots, lines, bet, symbols_value)
-    print(f"You won ₹{winnings}.")
-    print(f"You won on lines : ", *winning_lines)
+    print(Fore.GREEN + f"You won ₹{winnings}.")
+    print(Fore.GREEN + f"You won on lines : ", *winning_lines)
     return winnings - total_bet 
 
 
 def game():
+    clear_screen()
     balance=deposit()
     while True:
-        print(f"Current balance is ₹{balance}.")
-        user_answer = input("Press enter to play ('q' to quit).")
+        print(Fore.GREEN + f"Current balance is ₹{balance}.")
+        user_answer = input(Fore.BLUE + "Press enter to play ('q' to quit).")
         if user_answer == "q":
             break
         balance += spin(balance)
-    print(f"You left with ₹{balance}.")
+    print(Fore.YELLOW + f"You left with ₹{balance}.")
 
 
 
